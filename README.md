@@ -9,5 +9,4 @@ Based on https://github.com/MigueBeneito/pNimble
 The development version of `pNimble` can be installed from GitHub using the `remotes` package:
 
 ```r
-install.packages("remotes")
 remotes::install_github("bsmiguelangel/pNimble")
