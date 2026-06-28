@@ -9,7 +9,6 @@ Based on https://github.com/MigueBeneito/pNimble
 Before installing `pNimble`, the development version of `nimble` should be installed from GitHub:
 
 ```r
-install.packages("remotes")
 remotes::install_github("nimble-dev/nimble", subdir = "packages/nimble")
 ```
 
