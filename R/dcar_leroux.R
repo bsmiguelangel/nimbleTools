@@ -47,15 +47,17 @@ utils::globalVariables(c("ADbreak", "dnorm", "nimDim", "nimInteger",
 #' @param rho Spatial dependence parameter. Values close to 0 correspond to
 #'   weak spatial dependence, while values close to 1 correspond to strong
 #'   spatial dependence.
-#' @param sd.theta Marginal standard deviation parameter of the spatial random
+#' @param sd Marginal standard deviation parameter of the spatial random
 #'   effects.
 #' @param Lambda Numeric vector containing the eigenvalues of
 #'   \eqn{\boldsymbol{D} - \boldsymbol{W}}, where \eqn{\boldsymbol{D}} is the
 #'   diagonal matrix of the numbers of neighbours and \eqn{\boldsymbol{W}} is
-#'   the neighbourhood matrix.
+#'   the neighbourhood matrix. This object can be constructed using
+#'   [lerouxObjects()].
 #' @param from.to Matrix with two columns defining the distinct neighbouring
 #'   pairs. Each row contains the indices of two neighbouring spatial units.
 #'   The implementation assumes that each neighbouring pair is included once.
+#'   This object can be constructed using [lerouxObjects()].
 #' @param zero_mean Numeric indicator. If `zero_mean = 1`, a zero-mean
 #'   constraint is added to the spatial random effects. If `zero_mean = 0`,
 #'   no zero-mean constraint is added. The default is `0`.
@@ -64,25 +66,38 @@ utils::globalVariables(c("ADbreak", "dnorm", "nimDim", "nimInteger",
 #'
 #' @returns The density or log-density of the Leroux CAR distribution.
 #'
-#' @seealso [rcar_leroux()]
+#' @seealso [rcar_leroux()], [lerouxObjects()]
 #'
 #' @examples
 #' \dontrun{
-#'   theta[1:NNUTS] ~ dcar_leroux(rho = rho,
-#'                                sd.theta = 1,
-#'                                Lambda = Lambda[1:NNUTS],
-#'                                from.to = from.to[1:NDist, 1:2],
-#'                                zero_mean = 0)
+#' W <- matrix(c(0, 1, 0,
+#'               1, 0, 1,
+#'               0, 1, 0),
+#'             nrow = 3, byrow = TRUE)
+#'
+#' leroux.obj <- lerouxObjects(W)
+#' Lambda <- leroux.obj$Lambda
+#' from.to <- leroux.obj$from.to
+#' NDist <- leroux.obj$NDist
+#' N <- nrow(W)
+#'
+#' code <- nimble::nimbleCode({
+#'   theta[1:N] ~ dcar_leroux(rho = rho,
+#'                            sd = 1,
+#'                            Lambda = Lambda[1:N],
+#'                            from.to = from.to[1:NDist, 1:2],
+#'                            zero_mean = 0)
+#' })
 #' }
 #'
 #' @export
 dcar_leroux <- nimble::nimbleFunction(
   name = "dcar_leroux",
-  run = function(x = double(1),        # Spatial random effect (vector)
-                 rho = double(0),      # Amount of spatial dependence (scalar)
-                 sd.theta = double(0), # Standard deviation (scalar)
-                 Lambda = double(1),   # Eigenvalues of matrix D - W
-                 from.to = double(2),  # Matrix of distinct pairs of neighbours from.to[, 1] < from.to[, 2]
+  run = function(x = double(1),                      # Spatial random effect (vector)
+                 rho = double(0),                    # Amount of spatial dependence (scalar)
+                 sd = double(0),                     # Standard deviation (scalar)
+                 Lambda = double(1),                 # Eigenvalues of matrix D - W
+                 from.to = double(2),                # Matrix of distinct pairs of neighbours from.to[, 1] < from.to[, 2]
                  zero_mean = double(0, default = 0), # Apply zero-mean constraint when set to 1
                  log = integer(0, default = 0)) {
 
@@ -105,16 +120,13 @@ dcar_leroux <- nimble::nimbleFunction(
       x.to[Dist] <- x[to[Dist]]
     }
 
-    logDens <- sum(dnorm(x[1:NMuni], mean = 0, sd = sd.theta * pow(1 - rho, -1/2), log = TRUE)) -
+    logDens <- sum(dnorm(x[1:NMuni], mean = 0, sd = sd * pow(1 - rho, -1/2), log = TRUE)) -
       NMuni/2 * log(1 - rho) +  sum(log(rho * (Lambda[1:NMuni] - 1) + 1))/2 -
-      pow(sd.theta, -2) * rho * sum(pow(x.from[1:NDist] - x.to[1:NDist], 2))/2
+      pow(sd, -2) * rho * sum(pow(x.from[1:NDist] - x.to[1:NDist], 2))/2
 
     # Add a zero-mean constraint when requested
     if (zero_mean == 1) {
-      logDens <- logDens + dnorm(mean(x[1:NMuni]),
-                                 mean = 0,
-                                 sd = sd.theta / 100,
-                                 log = TRUE)
+      logDens <- logDens + dnorm(mean(x[1:NMuni]), mean = 0, sd = sd / 100, log = TRUE)
     }
 
     returnType(double(0))

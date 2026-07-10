@@ -171,53 +171,72 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
 
   if (summary) {
 
-    # Summary is only calculated when several chains are available
-    if (length(resul2$samples) > 1) {
+    # Try to calculate posterior summaries, but return posterior samples if summary fails
+    summary.result <- tryCatch({
 
-      # Combine all chains to detect problematic variables
-      AllSamples <- do.call(rbind, resul2$samples)
+      # Summary is only calculated when several chains are available
+      if (length(resul2$samples) > 1) {
 
-      # Identify variables with zero variance or undefined variance
-      Var0s <- which(apply(AllSamples, 2, stats::var) == 0)
-      NAs <- which(is.na(apply(AllSamples, 2, stats::var)))
+        # Combine all chains to detect problematic variables
+        AllSamples <- do.call(rbind, resul2$samples)
 
-      if (length(Var0s) > 0 | length(NAs) > 0) {
+        # Identify variables with zero variance or undefined variance
+        Var0s <- which(apply(AllSamples, 2, stats::var) == 0)
+        NAs <- which(is.na(apply(AllSamples, 2, stats::var)))
 
-        # Remove problematic variables before calculating the standard summary
-        aux <- lapply(resul2$samples, function(x) {x[, -c(Var0s, NAs)]})
-        resul2$summary <- MCMCvis::MCMCsummary(aux)
+        if (length(Var0s) > 0 | length(NAs) > 0) {
 
-        if (length(Var0s) > 0) {
+          # Remove problematic variables before calculating the standard summary
+          aux <- lapply(resul2$samples, function(x) {x[, -c(Var0s, NAs)]})
+          summary.out <- MCMCvis::MCMCsummary(aux)
 
-          # Add summary rows manually for variables with zero variance
-          newSummaries <- cbind(apply(AllSamples[, Var0s], 2, mean),
-                                rep(0, length(Var0s)), rep(0, length(Var0s)),
-                                rep(0, length(Var0s)), rep(0, length(Var0s)),
-                                rep(NA, length(Var0s)), rep(NA, length(Var0s)))
-          rownames(newSummaries) <- colnames(AllSamples)[Var0s]
-          colnames(newSummaries) <- colnames(resul2$summary)
-          resul2$summary <- rbind(resul2$summary, newSummaries)
+          if (length(Var0s) > 0) {
+
+            # Add summary rows manually for variables with zero variance
+            newSummaries <- cbind(apply(AllSamples[, Var0s], 2, mean),
+                                  rep(0, length(Var0s)), rep(0, length(Var0s)),
+                                  rep(0, length(Var0s)), rep(0, length(Var0s)),
+                                  rep(NA, length(Var0s)), rep(NA, length(Var0s)))
+            rownames(newSummaries) <- colnames(AllSamples)[Var0s]
+            colnames(newSummaries) <- colnames(summary.out)
+            summary.out <- rbind(summary.out, newSummaries)
+          }
+
+          if (length(NAs) > 0) {
+
+            # Add empty summary rows for variables with undefined variance
+            newSummaries <- matrix(rep(NA, 7 * length(NAs)), ncol = 7)
+            rownames(newSummaries) <- colnames(AllSamples)[NAs]
+            colnames(newSummaries) <- colnames(summary.out)
+            summary.out <- rbind(summary.out, newSummaries)
+          }
+
+          # Reorder the summary to match the original variable order
+          summary.out <- summary.out[match(colnames(AllSamples),
+                                           rownames(summary.out)), ]
+        } else {
+
+          # Standard summary when no problematic variables are found
+          summary.out <- MCMCvis::MCMCsummary(resul2$samples)
         }
 
-        if (length(NAs) > 0) {
+        summary.out
 
-          # Add empty summary rows for variables with undefined variance
-          newSummaries <- matrix(rep(NA, 7 * length(NAs)), ncol = 7)
-          rownames(newSummaries) <- colnames(AllSamples)[NAs]
-          colnames(newSummaries) <- colnames(resul2$summary)
-          resul2$summary <- rbind(resul2$summary, newSummaries)
-        }
-
-        # Reorder the summary to match the original variable order
-        resul2$summary <- resul2$summary[match(colnames(AllSamples),
-                                               rownames(resul2$summary)), ]
       } else {
-
-        # Standard summary when no problematic variables are found
-        resul2$summary <- MCMCvis::MCMCsummary(resul2$samples)
+        warning("Summary cannot be calculated with a single chain. Posterior samples are returned without summary.")
+        NULL
       }
-    } else {
-      cat("summary cannot be calculated with a single chain.")
+
+    }, error = function(e) {
+
+      warning("Summary could not be calculated. Posterior samples are returned without summary. ",
+              "Original error: ", conditionMessage(e))
+
+      NULL
+    })
+
+    if (!is.null(summary.result)) {
+      resul2$summary <- summary.result
     }
   }
 
