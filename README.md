@@ -6,10 +6,9 @@ This package is based on the routines available at https://github.com/MigueBenei
 
 ## Installation
 
-`pNimble` requires the development version of `nimble`. Both packages can be installed from GitHub as follows:
+`pNimble` can be installed from GitHub as follows:
 
 ```r
-remotes::install_github("nimble-dev/nimble", subdir = "packages/nimble")
 remotes::install_github("bsmiguelangel/pNimble")
 ```
 
@@ -34,9 +33,14 @@ Main features currently included:
 * Adaptation of the Leroux CAR distribution to support HMC methods, including the use of `ADbreak()` to avoid unnecessary derivatives.
 * Basic handling of problematic variables in posterior summaries, such as variables with zero variance or undefined variance.
 
+## History
+
+### Version 0.4.0
+
+* Confirmed compatibility with the CRAN version of `nimble`. The development version of `nimble` is no longer required for installing or using `pNimble`.
+
 ## To do
 
-* Check whether the development version of `nimble` is still required, or whether the CRAN version is sufficient.
 * Rename the `sd.theta` argument in the Leroux CAR distribution to `sd`.
 * Make the strength of the zero-mean constraint adaptive according to the number of small areas.
 * Make posterior summaries fail safely, so that posterior samples are still returned if the summary cannot be calculated.
