@@ -28,6 +28,7 @@ Main features currently included:
 * Notification system using `ntfy`.
 * `dcar_leroux()`, a Leroux CAR density function for use in NIMBLE models.
 * `rcar_leroux()`, the corresponding random generation function required by NIMBLE. Random generation is currently not implemented.
+* `lerouxObjects()`, a helper function to construct the objects required by `dcar_leroux()` from a binary neighbourhood matrix.
 * Support for a zero-mean constraint in the Leroux CAR distribution through the `zero_mean` argument.
 * Adaptation of the Leroux CAR distribution to support HMC methods, including the use of `ADbreak()` to avoid unnecessary derivatives.
 
@@ -39,11 +40,11 @@ Main features currently included:
 * Renamed the `sd.theta` argument in the Leroux CAR distribution to `sd`.
 * Added safe error handling for WAIC and posterior summaries, so that posterior samples are still returned when these calculations fail.
 * Added `MCMCproblems()` to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
+* Added `lerouxObjects()` to construct the objects required by `dcar_leroux()` from a binary neighbourhood matrix.
 
 ## To do
 
 * Make the strength of the zero-mean constraint adaptive according to the number of small areas.
-* Write a helper function to construct the Leroux CAR objects from a neighbourhood matrix `W`, including `from.to` and the eigenvalues of `D - W`.
 * Ask the `nimble-users` Google Group about the `R CMD check` NOTE caused by assigning `dcar_leroux()` and `rcar_leroux()` to the global environment.
 * Modify `rcar_leroux()` so that it can generate random values from the Leroux CAR distribution.
 * Submit the package to CRAN.
