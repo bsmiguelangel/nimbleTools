@@ -4,7 +4,7 @@
 \alias{rcar_leroux}
 \title{Random generation function for the Leroux CAR distribution}
 \usage{
-rcar_leroux(n, rho, sd.theta, Lambda, from.to, zero_mean = 0)
+rcar_leroux(n, rho, sd, Lambda, from.to, zero_mean = 0)
 }
 \arguments{
 \item{n}{Number of observations to simulate. This argument is included for
@@ -14,17 +14,19 @@ compatibility with NIMBLE user-defined distributions.}
 weak spatial dependence, while values close to 1 correspond to strong
 spatial dependence.}
 
-\item{sd.theta}{Marginal standard deviation parameter of the spatial random
+\item{sd}{Marginal standard deviation parameter of the spatial random
 effects.}
 
 \item{Lambda}{Numeric vector containing the eigenvalues of
 \eqn{\boldsymbol{D} - \boldsymbol{W}}, where \eqn{\boldsymbol{D}} is the
 diagonal matrix of the numbers of neighbours and \eqn{\boldsymbol{W}} is
-the neighbourhood matrix.}
+the neighbourhood matrix. This object can be constructed using
+\code{\link[=lerouxObjects]{lerouxObjects()}}.}
 
 \item{from.to}{Matrix with two columns defining the distinct neighbouring
 pairs. Each row contains the indices of two neighbouring spatial units.
-The implementation assumes that each neighbouring pair is included once.}
+The implementation assumes that each neighbouring pair is included once.
+This object can be constructed using \code{\link[=lerouxObjects]{lerouxObjects()}}.}
 
 \item{zero_mean}{Numeric indicator. If \code{zero_mean = 1}, a zero-mean
 constraint is added to the spatial random effects. If \code{zero_mean = 0},
@@ -43,5 +45,5 @@ distributions. Random generation from the Leroux CAR distribution is not
 implemented, and the function stops if called.
 }
 \seealso{
-\code{\link[=dcar_leroux]{dcar_leroux()}}
+\code{\link[=dcar_leroux]{dcar_leroux()}}, \code{\link[=lerouxObjects]{lerouxObjects()}}
 }

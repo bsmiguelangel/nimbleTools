@@ -4,7 +4,7 @@
 \alias{dcar_leroux}
 \title{Density function for the Leroux CAR distribution}
 \usage{
-dcar_leroux(x, rho, sd.theta, Lambda, from.to, zero_mean = 0, log = 0)
+dcar_leroux(x, rho, sd, Lambda, from.to, zero_mean = 0, log = 0)
 }
 \arguments{
 \item{x}{Numeric vector of spatial random effects.}
@@ -13,17 +13,19 @@ dcar_leroux(x, rho, sd.theta, Lambda, from.to, zero_mean = 0, log = 0)
 weak spatial dependence, while values close to 1 correspond to strong
 spatial dependence.}
 
-\item{sd.theta}{Marginal standard deviation parameter of the spatial random
+\item{sd}{Marginal standard deviation parameter of the spatial random
 effects.}
 
 \item{Lambda}{Numeric vector containing the eigenvalues of
 \eqn{\boldsymbol{D} - \boldsymbol{W}}, where \eqn{\boldsymbol{D}} is the
 diagonal matrix of the numbers of neighbours and \eqn{\boldsymbol{W}} is
-the neighbourhood matrix.}
+the neighbourhood matrix. This object can be constructed using
+\code{\link[=lerouxObjects]{lerouxObjects()}}.}
 
 \item{from.to}{Matrix with two columns defining the distinct neighbouring
 pairs. Each row contains the indices of two neighbouring spatial units.
-The implementation assumes that each neighbouring pair is included once.}
+The implementation assumes that each neighbouring pair is included once.
+This object can be constructed using \code{\link[=lerouxObjects]{lerouxObjects()}}.}
 
 \item{zero_mean}{Numeric indicator. If \code{zero_mean = 1}, a zero-mean
 constraint is added to the spatial random effects. If \code{zero_mean = 0},
@@ -79,14 +81,27 @@ compute the log-density efficiently.
 }
 \examples{
 \dontrun{
-  theta[1:NNUTS] ~ dcar_leroux(rho = rho,
-                               sd.theta = 1,
-                               Lambda = Lambda[1:NNUTS],
-                               from.to = from.to[1:NDist, 1:2],
-                               zero_mean = 0)
+W <- matrix(c(0, 1, 0,
+              1, 0, 1,
+              0, 1, 0),
+            nrow = 3, byrow = TRUE)
+
+leroux.obj <- lerouxObjects(W)
+Lambda <- leroux.obj$Lambda
+from.to <- leroux.obj$from.to
+NDist <- leroux.obj$NDist
+N <- nrow(W)
+
+code <- nimble::nimbleCode({
+  theta[1:N] ~ dcar_leroux(rho = rho,
+                           sd = 1,
+                           Lambda = Lambda[1:N],
+                           from.to = from.to[1:NDist, 1:2],
+                           zero_mean = 0)
+})
 }
 
 }
 \seealso{
-\code{\link[=rcar_leroux]{rcar_leroux()}}
+\code{\link[=rcar_leroux]{rcar_leroux()}}, \code{\link[=lerouxObjects]{lerouxObjects()}}
 }
