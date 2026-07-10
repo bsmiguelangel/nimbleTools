@@ -20,18 +20,15 @@ Main features currently included:
 
 * `pNimble()`, a function to run independent NIMBLE MCMC chains in parallel.
 * Optional use of HMC sampling through `nimbleHMC`.
-* Optional calculation of WAIC from posterior samples.
-* Optional posterior summaries using `MCMCvis`.
 * Support for user-defined monitors.
 * Support for replacing default NIMBLE samplers.
+* Optional posterior summaries using `MCMCvis`, with safe error handling so that posterior samples are still returned if summaries cannot be calculated.
+* Optional calculation of WAIC from posterior samples, with safe error handling so that posterior samples are still returned if WAIC cannot be calculated.
 * Notification system using `ntfy`.
-* Use of `on.exit()` so that notifications are sent when the function exits, including when an error occurs.
-* Handling of WAIC errors so that posterior samples are returned even if WAIC cannot be calculated.
 * `dcar_leroux()`, a Leroux CAR density function for use in NIMBLE models.
 * `rcar_leroux()`, the corresponding random generation function required by NIMBLE. Random generation is currently not implemented.
 * Support for a zero-mean constraint in the Leroux CAR distribution through the `zero_mean` argument.
 * Adaptation of the Leroux CAR distribution to support HMC methods, including the use of `ADbreak()` to avoid unnecessary derivatives.
-* Basic handling of problematic variables in posterior summaries, such as variables with zero variance or undefined variance.
 
 ## History
 
@@ -39,11 +36,11 @@ Main features currently included:
 
 * Confirmed compatibility with the CRAN version of `nimble`. The development version of `nimble` is no longer required for installing or using `pNimble`.
 * Renamed the `sd.theta` argument in the Leroux CAR distribution to `sd`.
+* Added safe error handling for WAIC and posterior summaries, so that posterior samples are still returned when these calculations fail.
 
 ## To do
 
 * Make the strength of the zero-mean constraint adaptive according to the number of small areas.
-* Make posterior summaries fail safely, so that posterior samples are still returned if the summary cannot be calculated.
 * Write a helper function to construct the Leroux CAR objects from a neighbourhood matrix `W`, including `from.to` and the eigenvalues of `D - W`.
 * Ask the `nimble-users` Google Group about the `R CMD check` NOTE caused by assigning `dcar_leroux()` and `rcar_leroux()` to the global environment.
 * Add a diagnostic traceplot function that only plots parameters with problematic MCMC behaviour, for example `Rhat > 1.02` or `n.eff < 400`.
