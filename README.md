@@ -2,7 +2,7 @@
 
 `pNimble` is an `R` package to run NIMBLE models in parallel.
 
-This package is based on the routines available at https://github.com/MigueBeneito/pNimble
+This package is based on the routines available at https://github.com/MigueBeneito/pNimble. Earlier versions of these routines were numbered 0.1, 0.2 and 0.3, and the version history below starts at 0.4.0 with their development as an R package.
 
 ## Installation
 
