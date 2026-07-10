@@ -24,10 +24,10 @@ Main features currently included:
 * Support for replacing default NIMBLE samplers.
 * Optional posterior summaries using `MCMCvis`, with safe error handling so that posterior samples are still returned if summaries cannot be calculated.
 * Optional calculation of WAIC from posterior samples, with safe error handling so that posterior samples are still returned if WAIC cannot be calculated.
-* `MCMCproblems()`, a function to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
 * Notification system using `ntfy`.
 * `dcar_leroux()`, a Leroux CAR density function for use in NIMBLE models.
 * `rcar_leroux()`, the corresponding random generation function required by NIMBLE. Random generation is currently not implemented.
+* `MCMCproblems()`, a function to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
 * `lerouxObjects()`, a helper function to construct the objects required by `dcar_leroux()` from a binary neighbourhood matrix.
 * Support for a zero-mean constraint in the Leroux CAR distribution through the `zero_mean` argument.
 * Adaptation of the Leroux CAR distribution to support HMC methods, including the use of `ADbreak()` to avoid unnecessary derivatives.
