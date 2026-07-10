@@ -38,10 +38,10 @@ Main features currently included:
 ### Version 0.4.0
 
 * Confirmed compatibility with the CRAN version of `nimble`. The development version of `nimble` is no longer required for installing or using `pNimble`.
+* Renamed the `sd.theta` argument in the Leroux CAR distribution to `sd`.
 
 ## To do
 
-* Rename the `sd.theta` argument in the Leroux CAR distribution to `sd`.
 * Make the strength of the zero-mean constraint adaptive according to the number of small areas.
 * Make posterior summaries fail safely, so that posterior samples are still returned if the summary cannot be calculated.
 * Write a helper function to construct the Leroux CAR objects from a neighbourhood matrix `W`, including `from.to` and the eigenvalues of `D - W`.
