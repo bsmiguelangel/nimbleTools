@@ -7,11 +7,10 @@
 load_leroux()
 }
 \value{
-No return value. The function assigns \code{dcar_leroux} and \code{rcar_leroux} to the
-global environment.
+No return value.
 }
 \description{
-Make the Leroux CAR distribution functions available in the global
-environment so that NIMBLE can find them when processing BUGS model code.
+Register the Leroux CAR distribution so that it can be used in NIMBLE model
+code.
 }
 \keyword{internal}

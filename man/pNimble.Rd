@@ -60,7 +60,7 @@ inside \code{runParallel()}.}
 default NIMBLE samplers.}
 
 \item{parallel}{If \code{TRUE}, chains are run in parallel using a cluster with
-one worker per chain. If \code{FALSE}, only one chain is run.}
+one worker per chain. If \code{FALSE}, chains are run sequentially.}
 
 \item{control.model}{Optional list of arguments passed to \code{nimble::nimbleModel()}.}
 
