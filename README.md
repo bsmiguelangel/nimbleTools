@@ -42,8 +42,9 @@ Main features currently included:
 * Added safe error handling for WAIC and posterior summaries, so that posterior samples are still returned when these calculations fail.
 * Added `lerouxObjects()` to construct the objects required by `dcar_leroux()` from a binary neighbourhood matrix.
 * Added `MCMCproblems()` to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
+* Added a simple random generation function for `rcar_leroux()` to improve compatibility with NIMBLE user-defined distributions.
 
 ## To do
 
-* Modify `rcar_leroux()` so that it can generate random values from the Leroux CAR distribution.
+* Implement exact random generation from the Leroux CAR distribution.
 * Submit the package to CRAN.
