@@ -2,7 +2,7 @@
 % Please edit documentation in R/rcar_leroux.R
 \name{rcar_leroux}
 \alias{rcar_leroux}
-\title{Random generation function for the Leroux CAR distribution}
+\title{Random generation function associated with the Leroux CAR distribution}
 \usage{
 rcar_leroux(n, rho, sd, Lambda, from.to, zero_mean = 0)
 }
@@ -28,21 +28,22 @@ pairs. Each row contains the indices of two neighbouring spatial units.
 The implementation assumes that each neighbouring pair is included once.
 This object can be constructed using \code{\link[=lerouxObjects]{lerouxObjects()}}.}
 
-\item{zero_mean}{Numeric indicator. If \code{zero_mean = 1}, a zero-mean
-constraint is added to the spatial random effects. If \code{zero_mean = 0},
-no zero-mean constraint is added. The default is \code{0}.}
+\item{zero_mean}{Numeric indicator. If \code{zero_mean = 1}, generated values are
+centred to have mean zero. If \code{zero_mean = 0}, generated values are not
+centred. The default is \code{0}.}
 }
 \value{
-This function does not return simulated values. It stops with an
-error because random generation is not implemented.
+A numeric vector of simulated values.
 }
 \description{
-Random generation function associated with \code{\link[=dcar_leroux]{dcar_leroux()}}.
+Simple random generation function associated with \code{\link[=dcar_leroux]{dcar_leroux()}}.
 }
 \details{
 This function is included for compatibility with NIMBLE user-defined
-distributions. Random generation from the Leroux CAR distribution is not
-implemented, and the function stops if called.
+distributions. It generates independent normal values with mean zero and
+standard deviation \code{0.1}. Therefore, it should be understood as a simple
+generator for initial or simulated values, not as an exact simulation from
+the Leroux CAR distribution.
 }
 \seealso{
 \code{\link[=dcar_leroux]{dcar_leroux()}}, \code{\link[=lerouxObjects]{lerouxObjects()}}

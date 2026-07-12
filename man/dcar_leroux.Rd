@@ -90,12 +90,12 @@ leroux.obj <- lerouxObjects(W)
 Lambda <- leroux.obj$Lambda
 from.to <- leroux.obj$from.to
 NDist <- leroux.obj$NDist
-N <- nrow(W)
+NAreas <- nrow(W)
 
 code <- nimble::nimbleCode({
-  theta[1:N] ~ dcar_leroux(rho = rho,
+  theta[1:NAreas] ~ dcar_leroux(rho = rho,
                            sd = 1,
-                           Lambda = Lambda[1:N],
+                           Lambda = Lambda[1:NAreas],
                            from.to = from.to[1:NDist, 1:2],
                            zero_mean = 0)
 })
