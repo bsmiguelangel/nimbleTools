@@ -1,5 +1,5 @@
-utils::globalVariables(c("ADbreak", "dnorm", "nimDim", "nimInteger",
-                         "nimNumeric", "nimStop", "pow", "returnType"))
+utils::globalVariables(c("ADbreak", "dnorm", "nimInteger", "nimDim",
+                         "nimNumeric", "pow", "returnType"))
 
 #' Density function for the Leroux CAR distribution
 #'
@@ -79,12 +79,12 @@ utils::globalVariables(c("ADbreak", "dnorm", "nimDim", "nimInteger",
 #' Lambda <- leroux.obj$Lambda
 #' from.to <- leroux.obj$from.to
 #' NDist <- leroux.obj$NDist
-#' N <- nrow(W)
+#' NAreas <- nrow(W)
 #'
 #' code <- nimble::nimbleCode({
-#'   theta[1:N] ~ dcar_leroux(rho = rho,
+#'   theta[1:NAreas] ~ dcar_leroux(rho = rho,
 #'                            sd = 1,
-#'                            Lambda = Lambda[1:N],
+#'                            Lambda = Lambda[1:NAreas],
 #'                            from.to = from.to[1:NDist, 1:2],
 #'                            zero_mean = 0)
 #' })
@@ -102,7 +102,7 @@ dcar_leroux <- nimble::nimbleFunction(
                  log = integer(0, default = 0)) {
 
     # Number of small areas
-    NMuni <- dim(x)[1]
+    NAreas <- dim(x)[1]
 
     # Number of distinct pairs of neighbours
     NDist <- dim(from.to)[1]
@@ -120,13 +120,16 @@ dcar_leroux <- nimble::nimbleFunction(
       x.to[Dist] <- x[to[Dist]]
     }
 
-    logDens <- sum(dnorm(x[1:NMuni], mean = 0, sd = sd * pow(1 - rho, -1/2), log = TRUE)) -
-      NMuni/2 * log(1 - rho) +  sum(log(rho * (Lambda[1:NMuni] - 1) + 1))/2 -
+    logDens <- sum(dnorm(x[1:NAreas], mean = 0, sd = sd * pow(1 - rho, -1/2), log = TRUE)) -
+      NAreas/2 * log(1 - rho) +  sum(log(rho * (Lambda[1:NAreas] - 1) + 1))/2 -
       pow(sd, -2) * rho * sum(pow(x.from[1:NDist] - x.to[1:NDist], 2))/2
 
     # Add a zero-mean constraint when requested
     if (zero_mean == 1) {
-      logDens <- logDens + dnorm(mean(x[1:NMuni]), mean = 0, sd = sd / 100, log = TRUE)
+      logDens <- logDens + dnorm(mean(x[1:NAreas]),
+                                 mean = 0,
+                                 sd = sd / (10 * pow(NAreas, 1/2)),
+                                 log = TRUE)
     }
 
     returnType(double(0))
@@ -137,5 +140,5 @@ dcar_leroux <- nimble::nimbleFunction(
     }
 
   },
-  buildDerivs = list(run = list(ignore = c("Dist", "NMuni", "NDist")))
+  buildDerivs = list(run = list(ignore = c("Dist", "NAreas", "NDist")))
 )

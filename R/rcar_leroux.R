@@ -1,10 +1,14 @@
-#' Random generation function for the Leroux CAR distribution
+utils::globalVariables(c("rnorm", "nimNumeric", "returnType"))
+
+#' Random generation function associated with the Leroux CAR distribution
 #'
-#' Random generation function associated with [dcar_leroux()].
+#' Simple random generation function associated with [dcar_leroux()].
 #'
 #' This function is included for compatibility with NIMBLE user-defined
-#' distributions. Random generation from the Leroux CAR distribution is not
-#' implemented, and the function stops if called.
+#' distributions. It generates independent normal values with mean zero and
+#' standard deviation `0.1`. Therefore, it should be understood as a simple
+#' generator for initial or simulated values, not as an exact simulation from
+#' the Leroux CAR distribution.
 #'
 #' @param n Number of observations to simulate. This argument is included for
 #'   compatibility with NIMBLE user-defined distributions.
@@ -22,12 +26,11 @@
 #'   pairs. Each row contains the indices of two neighbouring spatial units.
 #'   The implementation assumes that each neighbouring pair is included once.
 #'   This object can be constructed using [lerouxObjects()].
-#' @param zero_mean Numeric indicator. If `zero_mean = 1`, a zero-mean
-#'   constraint is added to the spatial random effects. If `zero_mean = 0`,
-#'   no zero-mean constraint is added. The default is `0`.
+#' @param zero_mean Numeric indicator. If `zero_mean = 1`, generated values are
+#'   centred to have mean zero. If `zero_mean = 0`, generated values are not
+#'   centred. The default is `0`.
 #'
-#' @returns This function does not return simulated values. It stops with an
-#'   error because random generation is not implemented.
+#' @returns A numeric vector of simulated values.
 #'
 #' @seealso [dcar_leroux()], [lerouxObjects()]
 #'
@@ -41,9 +44,30 @@ rcar_leroux <- nimble::nimbleFunction(
                  from.to = double(2),
                  zero_mean = double(0, default = 0)) {
 
+    # returnType(double(1))
+    # nimStop("user-defined distribution dcar_leroux provided without random generation function.")
+    # x <- nimNumeric(length(Lambda))
+    # return(x)
+
+    # Number of small areas
+    NAreas <- length(Lambda)
+
+    # Simulated values
+    x <- nimNumeric(NAreas)
+
+    for (i in 1:NAreas) {
+      x[i] <- rnorm(1, mean = 0, sd = 0.1)
+    }
+
+    # Centre generated values when requested
+    if (zero_mean == 1) {
+      x.mean <- mean(x[1:NAreas])
+      for (i in 1:NAreas) {
+        x[i] <- x[i] - x.mean
+      }
+    }
+
     returnType(double(1))
-    nimStop("user-defined distribution dcar_leroux provided without random generation function.")
-    x <- nimNumeric(length(Lambda))
     return(x)
   }
 )
