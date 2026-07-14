@@ -2,7 +2,7 @@
 
 `pNimble` is an `R` package to run NIMBLE models in parallel.
 
-This package is based on the routines available at https://github.com/MigueBeneito/pNimble. Earlier versions of these routines were numbered `0.1`, `0.2` and `0.3`, and the version history below starts at `0.4.0` with their development as an R package.
+This package is based on the routines available at https://github.com/MigueBeneito/pNimble. Earlier versions of these routines were numbered `0.1`, `0.2` and `0.3`, and the version history below starts at `0.4.0` with their development as an `R` package.
 
 ## Installation
 
@@ -46,7 +46,7 @@ Main features currently included:
 
 ## To do
 
-* Consider a new package name, such as `nimbleTools`, because the package now includes tools beyond parallelisation.
+* Consider a new package name, such as `nimbleTools`, as the package now includes tools beyond parallelisation.
 * Extend `lerouxObjects()` so that Leroux CAR objects can also be constructed from the usual `WinBUGS` neighbourhood objects `adj` and `num`, in addition to a binary neighbourhood matrix.
 * Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held.
 * Release version `1.0.0` when the package is ready for submission to CRAN.
