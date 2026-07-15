@@ -28,7 +28,7 @@ Main features currently included:
 * Notification system using `ntfy`.
 * `dcar_leroux()`, a Leroux CAR density function for use in NIMBLE models.
 * `rcar_leroux()`, the corresponding random generation function required by NIMBLE. It currently generates independent normal values for compatibility with NIMBLE, not exact simulations from the Leroux CAR distribution.
-* `lerouxObjects()`, a helper function to construct the objects required by `dcar_leroux()` from a binary neighbourhood matrix.
+* `lerouxObjects()`, a helper function to construct the objects required by `dcar_leroux()` from different neighbourhood representations, including a binary neighbourhood matrix, `WinBUGS` objects `adj` and `num`, and graph objects.
 * Support for a zero-mean constraint in the Leroux CAR distribution through the `zero_mean` argument.
 * Adaptation of the Leroux CAR distribution to support HMC methods, including the use of `ADbreak()` to avoid unnecessary derivatives.
 
@@ -40,7 +40,7 @@ Main features currently included:
 * Renamed the `sd.theta` argument in the Leroux CAR distribution to `sd`.
 * Made the zero-mean constraint in the Leroux CAR distribution adaptive to the number of small areas.
 * Added safe error handling for WAIC and posterior summaries, so that posterior samples are still returned when these calculations fail.
-* Added `lerouxObjects()` to construct the objects required by `dcar_leroux()` from a binary neighbourhood matrix.
+* Added `lerouxObjects()` to construct the objects required by `dcar_leroux()` from different neighbourhood representations, including a binary neighbourhood matrix, `WinBUGS` objects `adj` and `num`, and graph objects.
 * Added `MCMCproblems()` to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
 * Added a simple random generation function for `rcar_leroux()` to improve compatibility with NIMBLE user-defined distributions.
 
