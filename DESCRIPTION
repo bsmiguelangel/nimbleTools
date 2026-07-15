@@ -1,10 +1,10 @@
-Package: pNimble
-Title: Run NIMBLE Models in Parallel
+Package: nimbleTools
+Title: Tools for Running and Diagnosing NIMBLE Models
 Version: 0.4.0
 Authors@R: c(
     person("Miguel Ángel", "Beltrán-Sánchez", , "angel.beltran@uv.es", role = c("aut", "cre")),
     person("Miguel Ángel", "Martínez-Beneito", , "miguel.a.martinez@uv.es", role = "aut"))
-Description: Runs NIMBLE MCMC chains in parallel and returns posterior samples, summaries and WAIC.
+Description: Provides tools for running 'NIMBLE' MCMC chains in parallel, diagnosing problematic MCMC behaviour, and using a Leroux CAR distribution in 'NIMBLE' model code. Optional features include posterior summaries, WAIC calculation, and HMC sampling.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
