@@ -11,6 +11,13 @@ MCMCproblems(
   n.eff.min = 100,
   plot = TRUE,
   round = 4,
+  type = "trace",
+  pdf = FALSE,
+  ind = TRUE,
+  exact = TRUE,
+  ISB = FALSE,
+  Rhat = TRUE,
+  n.eff = TRUE,
   ...
 )
 }
@@ -35,8 +42,28 @@ problematic parameters. The default is \code{TRUE}.}
 \item{round}{Number of decimal places used by \code{MCMCvis::MCMCsummary()}.
 The default is \code{4}.}
 
-\item{...}{Additional arguments passed to \code{MCMCvis::MCMCtrace()}, such as
-\code{type}, \code{pdf}, \code{ind}, \code{exact}, \code{ISB}, \code{Rhat} or \code{n.eff}.}
+\item{type}{Type of plot produced by \code{MCMCvis::MCMCtrace()}. The default is
+\code{"trace"}, which produces traceplots only.}
+
+\item{pdf}{Logical value passed to \code{MCMCvis::MCMCtrace()}. If \code{TRUE}, plots
+are saved to a PDF file. The default is \code{FALSE}.}
+
+\item{ind}{Logical value passed to \code{MCMCvis::MCMCtrace()}. The default is
+\code{TRUE}.}
+
+\item{exact}{Logical value passed to \code{MCMCvis::MCMCtrace()}. The default is
+\code{TRUE}.}
+
+\item{ISB}{Logical value passed to \code{MCMCvis::MCMCtrace()}. The default is
+\code{FALSE}.}
+
+\item{Rhat}{Logical value passed to \code{MCMCvis::MCMCtrace()}. If \code{TRUE}, \code{Rhat}
+values are added to the plots. The default is \code{TRUE}.}
+
+\item{n.eff}{Logical value passed to \code{MCMCvis::MCMCtrace()}. If \code{TRUE},
+effective sample sizes are added to the plots. The default is \code{TRUE}.}
+
+\item{...}{Additional arguments passed to \code{MCMCvis::MCMCtrace()}.}
 }
 \value{
 A posterior summary table restricted to the parameters with
