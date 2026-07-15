@@ -1,20 +1,20 @@
-# pNimble
+# nimbleTools
 
-`pNimble` is an `R` package to run NIMBLE models in parallel.
+`nimbleTools` is an `R` package providing tools for running and diagnosing NIMBLE models.
 
 This package is based on the routines available at https://github.com/MigueBeneito/pNimble. Earlier versions of these routines were numbered `0.1`, `0.2` and `0.3`, and the version history below starts at `0.4.0` with their development as an `R` package.
 
 ## Installation
 
-`pNimble` can be installed from `GitHub` as follows:
+`nimbleTools` can be installed from `GitHub` as follows:
 
 ```r
-remotes::install_github("bsmiguelangel/pNimble")
+remotes::install_github("bsmiguelangel/nimbleTools")
 ```
 
 ## Current version
 
-The current version of `pNimble` includes tools to run NIMBLE models in parallel and to use a Leroux CAR distribution in NIMBLE model code.
+The current version of `nimbleTools` includes tools to run NIMBLE models in parallel, diagnose MCMC output, and use a Leroux CAR distribution in NIMBLE model code.
 
 Main features currently included:
 
@@ -36,7 +36,7 @@ Main features currently included:
 
 ### Version `0.4.0`
 
-* Confirmed compatibility with the CRAN version of `nimble`. The development version of `nimble` is no longer required for installing or using `pNimble`.
+* Confirmed compatibility with the CRAN version of `nimble`. The development version of `nimble` is no longer required for installing or using `nimbleTools`.
 * Renamed the `sd.theta` argument in the Leroux CAR distribution to `sd`.
 * Made the zero-mean constraint in the Leroux CAR distribution adaptive to the number of small areas.
 * Added safe error handling for WAIC and posterior summaries, so that posterior samples are still returned when these calculations fail.
@@ -46,7 +46,7 @@ Main features currently included:
 
 ## To do
 
-* Consider a new package name, such as `nimbleTools`, as the package now includes tools beyond parallelisation.
-* Extend `lerouxObjects()` so that Leroux CAR objects can also be constructed from the usual `WinBUGS` neighbourhood objects `adj` and `num`, in addition to a binary neighbourhood matrix.
+* Extend `lerouxObjects()` so that Leroux CAR objects can also be constructed from alternative neighbourhood representations, including the usual `WinBUGS` objects `adj` and `num`, and graph formats commonly used with `INLA`, in addition to a binary neighbourhood matrix `W`.
+* Assess the sensitivity of the adaptation parameter used in the zero-mean constraint, currently fixed at `10`.
 * Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held.
 * Release version `1.0.0` when the package is ready for submission to `CRAN`.
