@@ -26,8 +26,21 @@
 #'   problematic parameters. The default is `TRUE`.
 #' @param round Number of decimal places used by `MCMCvis::MCMCsummary()`.
 #'   The default is `4`.
-#' @param ... Additional arguments passed to `MCMCvis::MCMCtrace()`, such as
-#'   `type`, `pdf`, `ind`, `exact`, `ISB`, `Rhat` or `n.eff`.
+#' @param type Type of plot produced by `MCMCvis::MCMCtrace()`. The default is
+#'   `"trace"`, which produces traceplots only.
+#' @param pdf Logical value passed to `MCMCvis::MCMCtrace()`. If `TRUE`, plots
+#'   are saved to a PDF file. The default is `FALSE`.
+#' @param ind Logical value passed to `MCMCvis::MCMCtrace()`. The default is
+#'   `TRUE`.
+#' @param exact Logical value passed to `MCMCvis::MCMCtrace()`. The default is
+#'   `TRUE`.
+#' @param ISB Logical value passed to `MCMCvis::MCMCtrace()`. The default is
+#'   `FALSE`.
+#' @param Rhat Logical value passed to `MCMCvis::MCMCtrace()`. If `TRUE`, `Rhat`
+#'   values are added to the plots. The default is `TRUE`.
+#' @param n.eff Logical value passed to `MCMCvis::MCMCtrace()`. If `TRUE`,
+#'   effective sample sizes are added to the plots. The default is `TRUE`.
+#' @param ... Additional arguments passed to `MCMCvis::MCMCtrace()`.
 #'
 #' @returns A posterior summary table restricted to the parameters with
 #'   problematic MCMC behaviour. If the result of `MCMCproblems()` is assigned
@@ -45,7 +58,10 @@
 #' @export
 MCMCproblems <- function(object, params = NULL,
                          Rhat.max = 1.10, n.eff.min = 100,
-                         plot = TRUE, round = 4, ...) {
+                         plot = TRUE, round = 4,
+                         type = "trace", pdf = FALSE, ind = TRUE,
+                         exact = TRUE, ISB = FALSE,
+                         Rhat = TRUE, n.eff = TRUE, ...) {
 
   # Extract posterior samples if a pNimble output object is provided
   if (is.list(object) && !is.null(object$samples)) {
@@ -95,7 +111,9 @@ MCMCproblems <- function(object, params = NULL,
   if (plot) {
     MCMCvis::MCMCtrace(object = samples,
                        params = rownames(problematic),
-                       ...)
+                       type = type, pdf = pdf, ind = ind,
+                       exact = exact, ISB = ISB, Rhat = Rhat,
+                       n.eff = n.eff, ...)
   }
 
   return(problematic)
