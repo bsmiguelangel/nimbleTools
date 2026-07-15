@@ -7,8 +7,10 @@
 #' other MCMC models. It calculates posterior summaries using
 #' `MCMCvis::MCMCsummary()` and identifies parameters with `Rhat`
 #' greater than `Rhat.max` or effective sample size `n.eff` lower than
-#' `n.eff.min`. If requested, traceplots are produced only for the problematic
-#' parameters using `MCMCvis::MCMCtrace()`.
+#' `n.eff.min`. Parameters with no variability, such as reference categories
+#' of factors, are excluded when they have `NaN` in `Rhat` and `0` in `n.eff`.
+#' If requested, traceplots are produced only for the problematic parameters
+#' using `MCMCvis::MCMCtrace()`.
 #'
 #' @param object Object returned by `pNimble()` containing a `samples` element,
 #'   or posterior samples as a `coda::mcmc.list` object.
@@ -24,11 +26,14 @@
 #'   problematic parameters. The default is `TRUE`.
 #' @param round Number of decimal places used by `MCMCvis::MCMCsummary()`.
 #'   The default is `4`.
-#' @param ... Additional arguments passed to `MCMCvis::MCMCtrace()`.
+#' @param ... Additional arguments passed to `MCMCvis::MCMCtrace()`, such as
+#'   `type`, `pdf`, `ind`, `exact`, `ISB`, `Rhat` or `n.eff`.
 #'
 #' @returns A posterior summary table restricted to the parameters with
-#'   problematic MCMC behaviour. If no problematic parameters are found, an
-#'   empty summary table is returned.
+#'   problematic MCMC behaviour. If the result of `MCMCproblems()` is assigned
+#'   to an object and problematic parameters are found, this summary table is
+#'   stored in that object. If no problematic parameters are found, a message is
+#'   printed and `NULL` is returned invisibly.
 #'
 #' @examples
 #' \dontrun{
@@ -64,6 +69,14 @@ MCMCproblems <- function(object, params = NULL,
     stop("MCMCsummary output must contain columns named 'Rhat' and 'n.eff'.")
   }
 
+  # Remove parameters with no variability, such as reference categories of
+  # factors, before identifying problematic parameters
+  no.variability <- is.nan(summary.out[, "Rhat"]) &
+    !is.na(summary.out[, "n.eff"]) &
+    summary.out[, "n.eff"] == 0
+
+  summary.out <- summary.out[!no.variability, , drop = FALSE]
+
   # Identify parameters with problematic MCMC behaviour
   problematic <- summary.out[
     summary.out[, "Rhat"] > Rhat.max | summary.out[, "n.eff"] < n.eff.min,
@@ -71,19 +84,18 @@ MCMCproblems <- function(object, params = NULL,
     drop = FALSE
   ]
 
-  # Return an empty table if no problematic parameters are found
+  # Print a message if no problematic parameters are found
   if (nrow(problematic) == 0) {
     message("No parameters with Rhat > ", Rhat.max,
             " or n.eff < ", n.eff.min, " were found.")
-    return(problematic)
+    return(invisible(NULL))
   }
 
   # Plot only problematic parameters when requested
   if (plot) {
     MCMCvis::MCMCtrace(object = samples,
                        params = rownames(problematic),
-                       pdf = FALSE, ind = TRUE, exact = TRUE,
-                       ISB = FALSE, Rhat = TRUE, n.eff = TRUE, ...)
+                       ...)
   }
 
   return(problematic)

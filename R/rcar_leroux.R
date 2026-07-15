@@ -6,9 +6,9 @@ utils::globalVariables(c("rnorm", "nimNumeric", "returnType"))
 #'
 #' This function is included for compatibility with NIMBLE user-defined
 #' distributions. It generates independent normal values with mean zero and
-#' standard deviation `0.1`. Therefore, it should be understood as a simple
-#' generator for initial or simulated values, not as an exact simulation from
-#' the Leroux CAR distribution.
+#' standard deviation given by the `sd` argument. Therefore, it should be
+#' understood as a simple generator for initial or simulated values, not as an
+#' exact simulation from the Leroux CAR distribution.
 #'
 #' @param n Number of observations to simulate. This argument is included for
 #'   compatibility with NIMBLE user-defined distributions.
@@ -34,6 +34,26 @@ utils::globalVariables(c("rnorm", "nimNumeric", "returnType"))
 #'
 #' @seealso [dcar_leroux()], [lerouxObjects()]
 #'
+#' @examples
+#' \dontrun{
+#' W <- matrix(c(0, 1, 0,
+#'               1, 0, 1,
+#'               0, 1, 0),
+#'             nrow = 3, byrow = TRUE)
+#'
+#' leroux.obj <- lerouxObjects(W)
+#'
+#' set.seed(1)
+#' x <- rcar_leroux(n = 1,
+#'                  rho = 0.65,
+#'                  sd = 0.1,
+#'                  Lambda = leroux.obj$Lambda,
+#'                  from.to = leroux.obj$from.to,
+#'                  zero_mean = 1)
+#'
+#' x
+#' }
+#'
 #' @export
 rcar_leroux <- nimble::nimbleFunction(
   name = "rcar_leroux",
@@ -56,7 +76,7 @@ rcar_leroux <- nimble::nimbleFunction(
     x <- nimNumeric(NAreas)
 
     for (i in 1:NAreas) {
-      x[i] <- rnorm(1, mean = 0, sd = 0.1)
+      x[i] <- rnorm(1, mean = 0, sd = sd)
     }
 
     # Centre generated values when requested
