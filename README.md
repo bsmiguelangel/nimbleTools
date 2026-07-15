@@ -9,7 +9,7 @@ This package is based on the routines available at https://github.com/MigueBenei
 `nimbleTools` can be installed from `GitHub` as follows:
 
 ```r
-remotes::install_github("bsmiguelangel/nimbleTools")
+remotes::install_github("bsmiguelangel/nimbleTools", force = TRUE)
 ```
 
 ## Current version
