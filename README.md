@@ -1,6 +1,6 @@
 # nimbleTools
 
-`nimbleTools` is an `R` package providing tools for running and diagnosing NIMBLE models.
+`nimbleTools` is an `R` package providing tools for running and diagnosing `NIMBLE` models.
 
 This package is based on the routines available at https://github.com/MigueBeneito/pNimble. Earlier versions of these routines were numbered `0.1`, `0.2` and `0.3`, and the version history below starts at `0.4.0` with their development as an `R` package.
 
@@ -14,20 +14,20 @@ remotes::install_github("bsmiguelangel/nimbleTools")
 
 ## Current version
 
-The current version of `nimbleTools` includes tools to run NIMBLE models in parallel, diagnose MCMC output, and use a Leroux CAR distribution in NIMBLE model code.
+The current version of `nimbleTools` includes tools to run `NIMBLE` models in parallel, diagnose MCMC output, and use a Leroux CAR distribution in `NIMBLE` model code.
 
 Main features currently included:
 
-* `pNimble()`, a function to run independent NIMBLE MCMC chains in parallel.
+* `pNimble()`, a function to run independent `NIMBLE` MCMC chains in parallel.
 * Optional use of HMC sampling through `nimbleHMC`.
 * Support for user-specified monitored variables.
-* Support for replacing selected default NIMBLE samplers.
+* Support for replacing selected default `NIMBLE` samplers.
 * Optional posterior summaries using `MCMCvis`, with safe error handling so that posterior samples are still returned if summaries cannot be calculated.
 * Optional calculation of WAIC from posterior samples, with safe error handling so that posterior samples are still returned if WAIC cannot be calculated.
 * `MCMCproblems()`, a function to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
 * Notification system using `ntfy`.
-* `dcar_leroux()`, a Leroux CAR density function for use in NIMBLE models.
-* `rcar_leroux()`, the corresponding random generation function required by NIMBLE. It currently generates independent normal values for compatibility with NIMBLE, not exact simulations from the Leroux CAR distribution.
+* `dcar_leroux()`, a Leroux CAR density function for use in `NIMBLE` models.
+* `rcar_leroux()`, the corresponding random generation function required by `NIMBLE`. It currently generates independent normal values for compatibility with `NIMBLE`, not exact simulations from the Leroux CAR distribution.
 * `lerouxObjects()`, a helper function to construct the objects required by `dcar_leroux()` from different neighbourhood representations, including a binary neighbourhood matrix, `WinBUGS` objects `adj` and `num`, and graph objects.
 * Support for a zero-mean constraint in the Leroux CAR distribution through the `zero_mean` argument.
 * Adaptation of the Leroux CAR distribution to support HMC methods, including the use of `ADbreak()` to avoid unnecessary derivatives.
@@ -42,7 +42,7 @@ Main features currently included:
 * Added safe error handling for WAIC and posterior summaries, so that posterior samples are still returned when these calculations fail.
 * Added `lerouxObjects()` to construct the objects required by `dcar_leroux()` from different neighbourhood representations, including a binary neighbourhood matrix, `WinBUGS` objects `adj` and `num`, and graph objects.
 * Added `MCMCproblems()` to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
-* Added a simple random generation function for `rcar_leroux()` to improve compatibility with NIMBLE user-defined distributions.
+* Added a simple random generation function for `rcar_leroux()` to improve compatibility with `NIMBLE` user-defined distributions.
 
 ## To do
 
