@@ -46,6 +46,19 @@ Main features currently included:
 
 ## To do
 
+* Improve the speed of `MCMCproblems()` by using an existing posterior summary when available, instead of recalculating diagnostics unnecessarily.
+* Extend `MCMCproblems()` so that selected parameters can be plotted directly through the `params` argument, regardless of their `Rhat` or `n.eff` values.
+* Consider whether `MCMCproblems()` should be renamed to `MCMCmonitor()` in a future version.
+* Check that the `monitors` argument in `pNimble()` only returns the variables requested by the user.
+* Check the handling of indexed parameter names in `MCMCproblems()`, such as `beta[1]`, especially when using `ISB` and `exact` arguments.
+* Move the registration of the Leroux CAR distribution to package loading, instead of registering and deregistering it every time `pNimble()` is called.
+* Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`.
+* Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution.
+* Add checks for the symmetry and validity of neighbourhood structures used by the Leroux CAR distribution.
+* Explore the use of `getTimes` to measure computation times and identify possible bottlenecks in `pNimble()`.
+* Consider including total computation time in the object returned by `pNimble()`.
+* Check that, when `WAIC = TRUE`, `pNimble()` automatically includes the stochastic parent nodes of the data nodes in the monitored variables.
+* Reduce unnecessary console messages during model loading, compilation and distribution registration when possible.
 * Assess the sensitivity of the adaptation parameter used in the zero-mean constraint, currently fixed at `10`.
 * Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held.
 * Release version `1.0.0` when the package is ready for submission to `CRAN`.
