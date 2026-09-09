@@ -54,7 +54,6 @@ Main features currently included:
 
 ## To do
 
-* Check that the `monitors` argument in `pNimble()` only returns the variables requested by the user.
 * Check that, when `WAIC = TRUE`, `pNimble()` automatically includes the stochastic parent nodes of the data nodes in the monitored variables.
 * Reduce unnecessary console messages during model loading, compilation and distribution registration when possible.
 * Explore the use of `getTimes` to measure computation times in `pNimble()` and consider including total computation time in the object returned by `pNimble()`.
