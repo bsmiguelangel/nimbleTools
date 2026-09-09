@@ -24,7 +24,7 @@ Main features currently included:
 * Support for replacing selected default `NIMBLE` samplers.
 * Optional posterior summaries using `MCMCvis`, with safe error handling so that posterior samples are still returned if summaries cannot be calculated.
 * Optional calculation of WAIC from posterior samples, with safe error handling so that posterior samples are still returned if WAIC cannot be calculated.
-* `MCMCproblems()`, a function to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
+* `MCMCmonitor()`, a function to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
 * Notification system using `ntfy`.
 * `dcar_leroux()`, a Leroux CAR density function for use in `NIMBLE` models.
 * `rcar_leroux()`, the corresponding random generation function required by `NIMBLE`. It currently generates independent normal values for compatibility with `NIMBLE`, not exact simulations from the Leroux CAR distribution.
@@ -33,6 +33,10 @@ Main features currently included:
 * Adaptation of the Leroux CAR distribution to support HMC methods, including the use of `ADbreak()` to avoid unnecessary derivatives.
 
 ## History
+
+### Version `0.5.0` - in development
+
+* Renamed `MCMCproblems()` to `MCMCmonitor()`.
 
 ### Version `0.4.0`
 
@@ -48,7 +52,6 @@ Main features currently included:
 
 * Improve the speed of `MCMCproblems()` by using an existing posterior summary when available, instead of recalculating diagnostics unnecessarily.
 * Extend `MCMCproblems()` so that selected parameters can be plotted directly through the `params` argument, regardless of their `Rhat` or `n.eff` values.
-* Consider whether `MCMCproblems()` should be renamed to `MCMCmonitor()` in a future version.
 * Check that the `monitors` argument in `pNimble()` only returns the variables requested by the user.
 * Check the handling of indexed parameter names in `MCMCproblems()`, such as `beta[1]`, especially when using `ISB` and `exact` arguments.
 * Reduce unnecessary console messages during model loading, compilation and distribution registration when possible.
