@@ -24,7 +24,7 @@ Main features currently included:
 * Support for replacing selected default `NIMBLE` samplers.
 * Optional posterior summaries using `MCMCvis`, with safe error handling so that posterior samples are still returned if summaries cannot be calculated.
 * Optional calculation of WAIC from posterior samples, with safe error handling so that posterior samples are still returned if WAIC cannot be calculated.
-* `MCMCmonitor()`, a function to identify parameters with problematic MCMC behaviour and optionally produce traceplots only for those parameters.
+* `MCMCmonitor()`, a function to identify parameters with problematic MCMC behaviour and optionally produce traceplots for problematic or user-selected parameters.
 * Notification system using `ntfy`.
 * `dcar_leroux()`, a Leroux CAR density function for use in `NIMBLE` models.
 * `rcar_leroux()`, the corresponding random generation function required by `NIMBLE`. It currently generates independent normal values for compatibility with `NIMBLE`, not exact simulations from the Leroux CAR distribution.
@@ -37,6 +37,10 @@ Main features currently included:
 ### Version `0.5.0` - in development
 
 * Renamed `MCMCproblems()` to `MCMCmonitor()`.
+* Improved `MCMCmonitor()` so that it uses the posterior summary stored in the `pNimble()` output when available, avoiding unnecessary recalculation of MCMC diagnostics.
+* Added the `only.problematic` argument to `MCMCmonitor()`, allowing users to return and plot all selected parameters instead of only those with problematic MCMC behaviour.
+* Improved the handling of indexed parameter names in `MCMCmonitor()`, such as `beta[1]`, when selecting parameters through the `params` argument.
+* Fixed the `monitors` argument in `pNimble()` so that the returned posterior samples only include the variables requested by the user.
 
 ### Version `0.4.0`
 
@@ -50,13 +54,10 @@ Main features currently included:
 
 ## To do
 
-* Improve the speed of `MCMCproblems()` by using an existing posterior summary when available, instead of recalculating diagnostics unnecessarily.
-* Extend `MCMCproblems()` so that selected parameters can be plotted directly through the `params` argument, regardless of their `Rhat` or `n.eff` values.
 * Check that the `monitors` argument in `pNimble()` only returns the variables requested by the user.
-* Check the handling of indexed parameter names in `MCMCproblems()`, such as `beta[1]`, especially when using `ISB` and `exact` arguments.
+* Check that, when `WAIC = TRUE`, `pNimble()` automatically includes the stochastic parent nodes of the data nodes in the monitored variables.
 * Reduce unnecessary console messages during model loading, compilation and distribution registration when possible.
 * Explore the use of `getTimes` to measure computation times in `pNimble()` and consider including total computation time in the object returned by `pNimble()`.
-* Check that, when `WAIC = TRUE`, `pNimble()` automatically includes the stochastic parent nodes of the data nodes in the monitored variables.
 * Move the registration of the Leroux CAR distribution to package loading, instead of registering and deregistering it every time `pNimble()` is called.
 * Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`.
 * Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution.
