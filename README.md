@@ -41,6 +41,8 @@ Main features currently included:
 * Added the `only.problematic` argument to `MCMCmonitor()`, allowing users to return and plot all selected parameters instead of only those with problematic MCMC behaviour.
 * Improved the handling of indexed parameter names in `MCMCmonitor()`, such as `beta[1]`, when selecting parameters through the `params` argument.
 * Fixed the `monitors` argument in `pNimble()` so that the returned posterior samples only include the variables requested by the user.
+* Checked that, when `WAIC = TRUE`, `pNimble()` automatically adds the stochastic parent nodes of the data nodes to the internal monitored variables required for WAIC calculation.
+* Suppressed unnecessary console messages produced when registering and deregistering the Leroux CAR distribution.
 
 ### Version `0.4.0`
 
@@ -54,10 +56,8 @@ Main features currently included:
 
 ## To do
 
-* Check that, when `WAIC = TRUE`, `pNimble()` automatically includes the stochastic parent nodes of the data nodes in the monitored variables.
-* Reduce unnecessary console messages during model loading, compilation and distribution registration when possible.
 * Explore the use of `getTimes` to measure computation times in `pNimble()` and consider including total computation time in the object returned by `pNimble()`.
-* Move the registration of the Leroux CAR distribution to package loading, instead of registering and deregistering it every time `pNimble()` is called.
+* Move the registration of the Leroux CAR distribution to package loading, instead of registering it every time `pNimble()` is called.
 * Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`.
 * Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution.
 * Add checks for the symmetry and validity of neighbourhood structures used by the Leroux CAR distribution.
