@@ -138,11 +138,13 @@ MCMCmonitor <- function(object, params = NULL, only.problematic = TRUE,
   summary.check <- summary.out[!no.variability, , drop = FALSE]
 
   # Identify parameters with problematic MCMC behaviour
-  problematic <- summary.check[
-    summary.check[, "Rhat"] > Rhat.max | summary.check[, "n.eff"] < n.eff.min,
-    ,
-    drop = FALSE
-  ]
+  is.problematic <- summary.check[, "Rhat"] > Rhat.max |
+    summary.check[, "n.eff"] < n.eff.min
+  
+  # Parameters with missing diagnostic values are not treated as problematic
+  is.problematic[is.na(is.problematic)] <- FALSE
+  
+  problematic <- summary.check[is.problematic, , drop = FALSE]
 
   # If only.problematic = FALSE, return and plot all selected parameters
   if (!only.problematic) {
