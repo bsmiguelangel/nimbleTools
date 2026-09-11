@@ -18,7 +18,7 @@ The current version of `nimbleTools` includes tools to run `NIMBLE` models in pa
 
 Main features currently included:
 
-* `pNimble()`, a function to run independent `NIMBLE` MCMC chains in parallel.
+* `pNimble()`, a function to run independent `NIMBLE` MCMC chains in parallel and return posterior samples with optional summaries, WAIC, and total computation time.
 * Optional use of HMC sampling through `nimbleHMC`.
 * Support for user-specified monitored variables.
 * Support for replacing selected default `NIMBLE` samplers.
@@ -58,10 +58,10 @@ Main features currently included:
 
 ## To do
 
-* Explore the use of `getTimes` to measure computation times in `pNimble()`.
-* Move the registration of the Leroux CAR distribution to package loading, instead of registering it every time `pNimble()` is called.
-* Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`.
-* Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution.
-* Assess the sensitivity of the adaptation parameter used in the zero-mean constraint, currently fixed at `10`.
-* Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held.
-* Release version `1.0.0` when the package is ready for submission to `CRAN`.
+* Explore the use of `getTimes` to measure sampler-level computation times in `pNimble()`. It may require changes to the way MCMC chains are run.
+* Move the registration of the Leroux CAR distribution to package loading, instead of registering it every time `pNimble()` is called. Its behaviour in parallel workers needs to be checked carefully.
+* Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`. It may require redesigning the current Leroux interface.
+* Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution. Its output still needs to be compared with the current objects required by `dcar_leroux()`.
+* Assess the sensitivity of the adaptation parameter used in the zero-mean constraint, currently fixed at `10`. It requires additional simulation studies.
+* Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held. The current `rcar_leroux()` function is only included for `NIMBLE` compatibility.
+* Release version `1.0.0` when the package is ready for submission to `CRAN`. This is planned for a later stage, after further testing and documentation.
