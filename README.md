@@ -2,7 +2,7 @@
 
 `nimbleTools` is an `R` package providing tools for running and diagnosing `NIMBLE` models.
 
-This package is based on the routines available at https://github.com/MigueBeneito/pNimble. Earlier versions of these routines were numbered `0.1`, `0.2` and `0.3`, and the version history below starts at `0.4.0` with their development as an `R` package.
+This package is based on the routines available at https://github.com/MigueBeneito/pNimble. Earlier versions of these routines were numbered `0.1`, `0.2`, and `0.3`, and the version history below starts at `0.4.0` with their development as an `R` package.
 
 ## Installation
 
