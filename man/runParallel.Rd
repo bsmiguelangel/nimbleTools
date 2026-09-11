@@ -36,8 +36,9 @@ runParallel(
 
 \item{HMC}{Logical value indicating whether HMC sampling should be used.}
 
-\item{WAIC}{Logical value indicating whether WAIC-related nodes should be
-added to the monitored variables.}
+\item{WAIC}{Logical value indicating whether the stochastic parent nodes of
+the data nodes should be added to the internal monitored variables for
+WAIC calculation.}
 
 \item{replaceSamplers}{Optional list used to replace default NIMBLE samplers.}
 

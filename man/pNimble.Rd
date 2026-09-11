@@ -44,14 +44,17 @@ seeds are set to \code{1:nchains}.}
 multiple chains are available.}
 
 \item{monitors}{Character vector with the names of the model variables to
-monitor.}
+return in the posterior samples. If \code{NULL}, the default monitored variables
+from the NIMBLE MCMC configuration are returned.}
 
 \item{ntfyAccount}{Optional account or topic used by \code{notify()} to send a
 notification when the model run finishes.}
 
 \item{email}{If \code{TRUE}, an email notification is sent through \code{notify()}.}
 
-\item{WAIC}{If \code{TRUE}, the WAIC is calculated from the posterior samples.}
+\item{WAIC}{If \code{TRUE}, the WAIC is calculated from the posterior samples.
+The stochastic parent nodes of the data nodes are automatically added to
+the internal monitored variables required for WAIC calculation.}
 
 \item{HMC}{If \code{TRUE}, the model is configured to use HMC sampling
 inside \code{runParallel()}.}
@@ -82,6 +85,7 @@ A list with at least the following elements:
 \item{summary}{Posterior summary returned by \code{MCMCvis::MCMCsummary()}, if
 \code{summary = TRUE} and multiple chains are available.}
 \item{WAIC}{WAIC value, if \code{WAIC = TRUE}.}
+\item{total.time}{Total computation time in seconds.}
 }
 }
 \description{
