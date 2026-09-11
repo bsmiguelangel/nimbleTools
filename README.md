@@ -34,7 +34,7 @@ Main features currently included:
 
 ## History
 
-### Version `0.5.0` - in development
+### Version `0.5.0`
 
 * Renamed `MCMCproblems()` to `MCMCmonitor()`.
 * Improved `MCMCmonitor()` so that it uses the posterior summary stored in the `pNimble()` output when available, avoiding unnecessary recalculation of MCMC diagnostics.
