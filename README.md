@@ -43,6 +43,8 @@ Main features currently included:
 * Fixed the `monitors` argument in `pNimble()` so that the returned posterior samples only include the variables requested by the user.
 * Checked that, when `WAIC = TRUE`, `pNimble()` automatically adds the stochastic parent nodes of the data nodes to the internal monitored variables required for WAIC calculation.
 * Suppressed unnecessary console messages produced when registering and deregistering the Leroux CAR distribution.
+* Added total computation time to the object returned by `pNimble()`.
+* Improved validity checks for neighbourhood structures used by the Leroux CAR distribution.
 
 ### Version `0.4.0`
 
@@ -56,11 +58,10 @@ Main features currently included:
 
 ## To do
 
-* Explore the use of `getTimes` to measure computation times in `pNimble()` and consider including total computation time in the object returned by `pNimble()`.
+* Explore the use of `getTimes` to measure computation times in `pNimble()`.
 * Move the registration of the Leroux CAR distribution to package loading, instead of registering it every time `pNimble()` is called.
 * Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`.
 * Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution.
-* Add checks for the symmetry and validity of neighbourhood structures used by the Leroux CAR distribution.
 * Assess the sensitivity of the adaptation parameter used in the zero-mean constraint, currently fixed at `10`.
 * Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held.
 * Release version `1.0.0` when the package is ready for submission to `CRAN`.
