@@ -188,7 +188,6 @@ lerouxObjects <- function(W = NULL, adj = NULL, num = NULL, graph = NULL) {
     if (is.matrix(graph) || inherits(graph, "Matrix")) {
 
       W <- as.matrix(graph)
-      diag(W) <- 0
       W <- 1 * (W != 0)
 
       return(W)

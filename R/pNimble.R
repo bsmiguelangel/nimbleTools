@@ -13,11 +13,14 @@
 #' @param summary If `TRUE`, posterior summaries are calculated when
 #'   multiple chains are available.
 #' @param monitors Character vector with the names of the model variables to
-#'   monitor.
+#'   return in the posterior samples. If `NULL`, the default monitored variables
+#'   from the NIMBLE MCMC configuration are returned.
 #' @param ntfyAccount Optional account or topic used by `notify()` to send a
 #'   notification when the model run finishes.
 #' @param email If `TRUE`, an email notification is sent through `notify()`.
 #' @param WAIC If `TRUE`, the WAIC is calculated from the posterior samples.
+#'   The stochastic parent nodes of the data nodes are automatically added to
+#'   the internal monitored variables required for WAIC calculation.
 #' @param HMC If `TRUE`, the model is configured to use HMC sampling
 #'   inside `runParallel()`.
 #' @param replaceSamplers Optional object passed to `runParallel()` to replace
@@ -39,6 +42,7 @@
 #'   \item{summary}{Posterior summary returned by `MCMCvis::MCMCsummary()`, if
 #'   `summary = TRUE` and multiple chains are available.}
 #'   \item{WAIC}{WAIC value, if `WAIC = TRUE`.}
+#'   \item{total.time}{Total computation time in seconds.}
 #' }
 #'
 #' @examples
@@ -81,7 +85,8 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
   # Send notification when the function exits, even if an error occurs
   on.exit({
     time.end <- Sys.time()
-    total.time <- as.numeric(time.end) - as.numeric(time.start)
+    total.time <- as.numeric(difftime(time.end, time.start,
+                                      units = "secs"))
     notify(time = total.time,
            email = email,
            ntfyAccount = ntfyAccount,
@@ -158,7 +163,7 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
                                  HMC = HMC, replaceSamplers = replaceSamplers, WAIC = WAIC, ...)
 
   } else {
-    
+
     # Run one independent NIMBLE chain for each seed sequentially
     resul <- lapply(X = seeds, FUN = runParallel, inits = inits,
                     control.model = control.model, control.compile = control.compile,
@@ -173,7 +178,30 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
   resul2 <- list()
 
   # Convert the raw samples into a coda mcmc.list object
-  resul2$samples <- coda::as.mcmc.list(lapply(resul, function(x) {coda::as.mcmc(x)}))
+  samples.all <- coda::as.mcmc.list(lapply(resul, function(x) {coda::as.mcmc(x)}))
+
+  # Keep only the variables requested by the user in the final posterior samples
+  resul2$samples <- samples.all
+
+  if (!is.null(monitors)) {
+
+    sample.names <- colnames(samples.all[[1]])
+
+    selected <- unlist(lapply(monitors, function(monitor) {
+      sample.names[sample.names == monitor |
+                     startsWith(sample.names, paste0(monitor, "["))]
+    }), use.names = FALSE)
+
+    selected <- unique(selected)
+
+    if (length(selected) == 0) {
+      stop("None of the variables in monitors were found in the posterior samples.")
+    }
+
+    resul2$samples <- coda::as.mcmc.list(lapply(samples.all, function(x) {
+      coda::as.mcmc(x[, selected, drop = FALSE])
+    }))
+  }
 
   if (summary) {
 
@@ -251,7 +279,7 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
     # Try to calculate WAIC, but return posterior samples if WAIC fails
     WAIC.result <- tryCatch({
 
-      # Load custom NIMBLE distributions or functions used by the model
+      # Register the Leroux CAR distribution before rebuilding the model for WAIC
       load_leroux()
 
       # Rebuild and compile the model to calculate WAIC from the posterior samples
@@ -259,7 +287,7 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
                                           check = FALSE, calculate = FALSE, buildDerivs = FALSE)
       cmodel <- nimble::compileNimble(model.nimble)
 
-      nimble::calculateWAIC(do.call(rbind, resul2$samples), cmodel)
+      nimble::calculateWAIC(do.call(rbind, samples.all), cmodel)
 
     }, error = function(e) {
 
@@ -271,6 +299,11 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
 
     resul2$WAIC <- WAIC.result
   }
+
+  # Add total computation time to the output object
+  time.end <- Sys.time()
+  resul2$total.time <- as.numeric(difftime(time.end, time.start,
+                                           units = "secs"))
 
   return(resul2)
 }

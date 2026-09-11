@@ -13,8 +13,9 @@
 #' @param control.build Optional list of arguments passed to
 #'   `nimble::buildMCMC()`.
 #' @param HMC Logical value indicating whether HMC sampling should be used.
-#' @param WAIC Logical value indicating whether WAIC-related nodes should be
-#'   added to the monitored variables.
+#' @param WAIC Logical value indicating whether the stochastic parent nodes of
+#'   the data nodes should be added to the internal monitored variables for
+#'   WAIC calculation.
 #' @param replaceSamplers Optional list used to replace default NIMBLE samplers.
 #' @param ... Additional arguments passed to `nimble::runMCMC()`.
 #'
@@ -33,7 +34,7 @@ runParallel <- function(seed, inits = NULL, control.model, control.compile,
     stop("Package 'nimbleHMC' is required when HMC = TRUE.")
   }
 
-  # Load custom NIMBLE distributions or functions used by the model
+  # Register the Leroux CAR distribution before building the model
   load_leroux()
 
   # Create empty control lists when they are not provided
@@ -54,7 +55,8 @@ runParallel <- function(seed, inits = NULL, control.model, control.compile,
                                c(model.nimble, control.compile),
                                quote = TRUE)
 
-  # Add likelihood nodes to the monitors when WAIC is requested
+  # Add the stochastic parent nodes of the data nodes to the internal monitors
+  # when WAIC is requested
   if (WAIC) {
     control.configure$monitors <- unique(c(control.configure$monitors,
                                            model.nimble$getParents(
