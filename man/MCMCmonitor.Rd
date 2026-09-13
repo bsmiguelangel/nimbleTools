@@ -44,8 +44,9 @@ is \code{100}.}
 \item{plot}{Logical value. If \code{TRUE}, traceplots are produced. The default is
 \code{TRUE}.}
 
-\item{round}{Number of decimal places used by \code{MCMCvis::MCMCsummary()} when
-the posterior summary has to be calculated. The default is \code{4}.}
+\item{round}{Number of decimal places used for the posterior summary returned
+by the function. When the posterior summary has to be calculated, this
+value is also passed to \code{MCMCvis::MCMCsummary()}. The default is \code{4}.}
 
 \item{type}{Type of plot produced by \code{MCMCvis::MCMCtrace()}. The default is
 \code{"trace"}, which produces traceplots only.}
@@ -53,14 +54,17 @@ the posterior summary has to be calculated. The default is \code{4}.}
 \item{pdf}{Logical value passed to \code{MCMCvis::MCMCtrace()}. If \code{TRUE}, plots
 are saved to a PDF file. The default is \code{FALSE}.}
 
-\item{ind}{Logical value passed to \code{MCMCvis::MCMCtrace()}. The default is
-\code{TRUE}.}
+\item{ind}{Logical value passed to \code{MCMCvis::MCMCtrace()}. If \code{TRUE},
+density plots are shown separately for each chain. The default is \code{TRUE}.}
 
-\item{exact}{Logical value passed to \code{MCMCvis::MCMCtrace()}. The default is
-\code{TRUE}.}
+\item{exact}{Logical value used when selecting parameters through \code{params}.
+If \code{TRUE}, parameter names are matched exactly after applying the \code{ISB}
+rule. If \code{FALSE}, parameter names are matched using regular expressions.
+The default is \code{TRUE}.}
 
-\item{ISB}{Logical value passed to \code{MCMCvis::MCMCtrace()}. The default is
-\code{FALSE}.}
+\item{ISB}{Logical value used when selecting parameters through \code{params}.
+If \code{TRUE}, square brackets and indices are ignored when matching parameter
+names. If \code{FALSE}, square brackets are kept. The default is \code{FALSE}.}
 
 \item{Rhat}{Logical value passed to \code{MCMCvis::MCMCtrace()}. If \code{TRUE}, \code{Rhat}
 values are added to the plots. The default is \code{TRUE}.}
@@ -71,26 +75,25 @@ effective sample sizes are added to the plots. The default is \code{TRUE}.}
 \item{...}{Additional arguments passed to \code{MCMCvis::MCMCtrace()}.}
 }
 \value{
-If \code{only.problematic = TRUE}, a posterior summary table restricted
-to the parameters with problematic MCMC behaviour is returned. If
-\code{only.problematic = FALSE}, a posterior summary table restricted to the
-selected parameters is returned. If no problematic parameters are found
-when \code{only.problematic = TRUE}, a message is printed and \code{NULL} is returned
-invisibly.
+A posterior summary table restricted either to the problematic
+parameters or to all selected parameters, depending on \code{only.problematic}.
+If no problematic parameters are found when \code{only.problematic = TRUE}, a
+message is printed and \code{NULL} is returned invisibly.
 }
 \description{
-Monitor MCMC diagnostics and optionally produce traceplots for selected or
-problematic parameters.
+Monitor MCMC diagnostics and optionally produce traceplots for selected
+parameters.
 }
 \details{
 The function can be used with posterior samples from \code{pNimble()} or from
 other MCMC models. When available, the posterior summary stored in the
 \code{pNimble()} output is used directly. Otherwise, posterior summaries are
-calculated using \code{MCMCvis::MCMCsummary()}. The function identifies parameters
-with \code{Rhat} greater than \code{Rhat.max} or effective sample size \code{n.eff} lower than
-\code{n.eff.min}. Parameters with no variability, such as reference categories
-of factors, are excluded when identifying problematic parameters if they have
-\code{NaN} in \code{Rhat} and \code{0} in \code{n.eff}.
+calculated using \code{MCMCvis::MCMCsummary()}.
+
+Parameters with \code{Rhat} greater than \code{Rhat.max} or effective sample size
+\code{n.eff} lower than \code{n.eff.min} are identified as problematic. Parameters with
+no variability or missing diagnostic values, such as reference categories of
+factors, are not treated as problematic.
 
 If \code{only.problematic = TRUE}, only parameters with problematic MCMC behaviour
 are returned and plotted. If \code{only.problematic = FALSE}, all selected
@@ -101,11 +104,14 @@ values.
 \dontrun{
 MCMCmonitor(object = fit,
             params = c("rho", "theta", "beta_age"),
-            Rhat.max = 1.02, n.eff.min = 400)
+            ISB = TRUE,
+            Rhat.max = 1.02,
+            n.eff.min = 400)
 
 MCMCmonitor(object = fit,
             params = "beta_age[2]",
-            only.problematic = FALSE)
+            only.problematic = FALSE,
+            ISB = FALSE)
 }
 
 }
