@@ -39,6 +39,7 @@ Main features currently included:
 * Fixed the `monitors` argument in `pNimble()` so that the returned posterior samples only include the variables requested by the user.
 * Checked that, when `WAIC = TRUE`, `pNimble()` automatically adds the stochastic parent nodes of the data nodes to the internal monitored variables required for WAIC calculation.
 * Added total computation time to the object returned by `pNimble()`.
+* Improved memory management in `pNimble()` by stopping parallel workers immediately after the MCMC chains finish, before calculating posterior summaries and WAIC.
 * Renamed `MCMCproblems()` to `MCMCmonitor()`.
 * Improved `MCMCmonitor()` so that it uses the posterior summary stored in the `pNimble()` output when available, avoiding unnecessary recalculation of MCMC diagnostics.
 * Added the `only.problematic` argument to `MCMCmonitor()`, allowing users to return and plot all selected parameters instead of only those with problematic MCMC behaviour.
@@ -58,7 +59,6 @@ Main features currently included:
 
 ## To do
 
-* Explore ways to reduce memory usage in `pNimble()` when running large models. _In particular, check whether stopping the parallel cluster immediately after the MCMC chains finish helps free memory before calculating posterior summaries and WAIC._
 * Explore the use of `getTimes` to measure sampler-level computation times in `pNimble()`. _It may require changes to the way MCMC chains are run._
 * Move the registration of the Leroux CAR distribution to package loading, instead of registering it every time `pNimble()` is called. _Its behaviour in parallel workers needs to be checked carefully._
 * Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`. _It may require redesigning the current Leroux interface._
