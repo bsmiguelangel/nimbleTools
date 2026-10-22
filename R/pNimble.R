@@ -135,8 +135,9 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
     # A cluster with one worker per chain is created
     my.cluster <- parallel::makeCluster(nchains)
 
-    # Ensure that the cluster is stopped when the function exits
-    on.exit(parallel::stopCluster(my.cluster), add = TRUE)
+    # Ensure that the cluster is stopped if the function exits unexpectedly
+    on.exit({if (!is.null(my.cluster))
+      parallel::stopCluster(my.cluster)}, add = TRUE)
 
     # Load NIMBLE in each worker
     parallel::clusterEvalQ(my.cluster, {
@@ -161,6 +162,10 @@ pNimble <- function(code = NULL, data = NULL, constants = NULL, inits = NULL,
                                  control.model = control.model, control.compile = control.compile,
                                  control.configure = control.configure, control.build = control.build,
                                  HMC = HMC, replaceSamplers = replaceSamplers, WAIC = WAIC, ...)
+
+    # Stop the cluster once all chains have finished
+    parallel::stopCluster(my.cluster)
+    my.cluster <- NULL
 
   } else {
 
