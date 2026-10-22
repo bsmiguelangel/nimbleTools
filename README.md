@@ -58,10 +58,12 @@ Main features currently included:
 
 ## To do
 
+* Explore ways to reduce memory usage in `pNimble()` when running large models. _In particular, check whether stopping the parallel cluster immediately after the MCMC chains finish helps free memory before calculating posterior summaries and WAIC._
 * Explore the use of `getTimes` to measure sampler-level computation times in `pNimble()`. _It may require changes to the way MCMC chains are run._
 * Move the registration of the Leroux CAR distribution to package loading, instead of registering it every time `pNimble()` is called. _Its behaviour in parallel workers needs to be checked carefully._
 * Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`. _It may require redesigning the current Leroux interface._
 * Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution. _Its output still needs to be compared with the current objects required by `dcar_leroux()`._
 * Assess the sensitivity of the adaptation parameter used in the zero-mean constraint, currently fixed at `10`. _It requires additional simulation studies._
 * Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held. _The current `rcar_leroux()` function is only included for `NIMBLE` compatibility._
+* Explore the implementation of a BYM2 spatial prior in `NIMBLE`, alongside the Leroux CAR distribution. _Its implementation and compatibility with HMC need to be checked._
 * Release version `1.0.0` when the package is ready for submission to `CRAN`. _This is planned for a later stage, after further testing and documentation._
