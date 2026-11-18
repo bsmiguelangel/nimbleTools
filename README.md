@@ -59,11 +59,17 @@ Main features currently included:
 
 ## To do
 
-* Explore the use of `getTimes` to measure sampler-level computation times in `pNimble()`. _It may require changes to the way MCMC chains are run._
-* Move the registration of the Leroux CAR distribution to package loading, instead of registering it every time `pNimble()` is called. _Its behaviour in parallel workers needs to be checked carefully._
-* Explore the use of `nimbleFunction` setup code to give the Leroux CAR distribution a more standard input format, closer to the ICAR distribution used by `NIMBLE`. _It may require redesigning the current Leroux interface._
-* Explore whether `nimble::as.carAdjacency()` can be used to construct the neighbourhood objects required by the Leroux CAR distribution. _Its output still needs to be compared with the current objects required by `dcar_leroux()`._
+### Before the first CRAN submission
+
+* Make `pNimble()` work without requiring users to call `library(nimble)` or `library(nimbleHMC)` themselves. _Check standard MCMC and HMC in a fresh R session._
+* Update `dcar_leroux()` to accept standard spatial neighbourhood inputs, similar to those used by NIMBLE's ICAR distribution. _Explore using `nimbleFunction` setup code to compute `Lambda` and `from.to` once per model._
+  * Check whether `nimble::as.carAdjacency()` can help prepare the neighbourhood inputs. _Compare its output with the inputs needed by the new Leroux setup._
+* Move the registration of the Leroux CAR distribution from `runParallel()` to package loading. _Check that the distribution is available in parallel workers._
+* Return sampler-level computation times by default in `pNimble()`. _Check how to collect them with `getTimes()` and report them across chains. This may require changes to the way MCMC chains are run._
+* Submit version `1.0.0` to CRAN. _Update the documentation and examples, test the changes, and run the final package checks before submission._
+
+### Other tasks
+
 * Assess the sensitivity of the adaptation parameter used in the zero-mean constraint, currently fixed at `10`. _It requires additional simulation studies._
 * Implement exact random generation from the Leroux CAR distribution, following GMRF simulation methods such as those described by Rue and Held. _The current `rcar_leroux()` function is only included for `NIMBLE` compatibility._
 * Explore the implementation of a BYM2 spatial prior in `NIMBLE`, alongside the Leroux CAR distribution. _Its implementation and compatibility with HMC need to be checked._
-* Release version `1.0.0` when the package is ready for submission to `CRAN`. _This is planned for a later stage, after further testing and documentation._
