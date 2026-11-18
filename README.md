@@ -63,7 +63,7 @@ Main features currently included:
 
 * Make `pNimble()` work without requiring users to call `library(nimble)` or `library(nimbleHMC)` themselves. _Check standard MCMC and HMC in a fresh R session._
 * Update `dcar_leroux()` to accept standard spatial neighbourhood inputs, similar to those used by NIMBLE's ICAR distribution. _Explore using `nimbleFunction` setup code to compute `Lambda` and `from.to` once per model._
-  * Check whether `nimble::as.carAdjacency()` can help prepare the neighbourhood inputs. _Compare its output with the inputs needed by the new Leroux setup._
+* Check whether `nimble::as.carAdjacency()` can help prepare the neighbourhood inputs. _Compare its output with the inputs needed by the new Leroux setup._
 * Move the registration of the Leroux CAR distribution from `runParallel()` to package loading. _Check that the distribution is available in parallel workers._
 * Return sampler-level computation times by default in `pNimble()`. _Check how to collect them with `getTimes()` and report them across chains. This may require changes to the way MCMC chains are run._
 * Submit version `1.0.0` to CRAN. _Update the documentation and examples, test the changes, and run the final package checks before submission._
